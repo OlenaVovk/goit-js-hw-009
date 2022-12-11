@@ -13,7 +13,7 @@ function onStartClick (){
     
   editAttribute(stopBtn, 'disabled', '');
   editAttribute(startBtn, 'disabled', '');
-  
+
   IntervalId = setInterval(() => {
     body.style.backgroundColor = getRandomHexColor();
   }, 1000)
