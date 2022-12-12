@@ -7,6 +7,8 @@ const daySpan = document.querySelector('span[data-days]');
 const hourSpan = document.querySelector('span[data-hours]');
 const minSpan = document.querySelector('span[data-minutes]');
 const secSpan = document.querySelector('span[data-seconds]');
+let timerCondition = false;
+
 
 const options = {
   enableTime: true,
@@ -18,20 +20,42 @@ const options = {
 
     const currentDate = new Date();
     if (selectedDates[0] < currentDate) {
-      Notiflix.Notify.failure("Please choose a date in the future");
+      Notiflix.Notify.failure(
+        "Please choose a date in the future",
+        {
+          timeout: 500,
+        },);
       addDisabled(button);
-    } else {
-      if (!button.hasAttribute('disabled')) {
-        return;
-      } 
-    removeDisabled(button);
-    button.addEventListener('click', onClickHandler(selectedDates[0]));  
+    } else {  
+      removeDisabled(button);
+      button.addEventListener('click', () => {
+        addDisabled(button);
+        if (timerCondition) {
+          Notiflix.Notify.warning(
+            "Таймер вже запущено! Схаменіться!",
+            {
+              timeout: 500,
+            },);
+          return;
+        }
+        setInterval(() => {
+          timerCondition = true;
+          const delta = selectedDates[0] - new Date();
+          if (delta <= 0){
+            return;
+          };
+          const time = convertMs(delta);
+          //console.log(time);
+          updateTimerFace(time); 
+        }, 1000);
+      }); 
     }
   },
 };
 
 addDisabled(button);
 flatpickr('input#datetime-picker', options);
+ 
 
 function addDisabled (elem) {
   elem.setAttribute('disabled', '')
@@ -41,17 +65,6 @@ function removeDisabled (elem) {
   elem.removeAttribute('disabled');
 }
 
-function onClickHandler (date) {
-  setInterval(() => {
-    const delta = date - new Date();
-    if (delta <= 0){
-      return;
-    };
-    const time = convertMs(delta);
-   // console.log(time);
-    updateTimerFace(time); 
-  }, 1000)
-}
 
 function convertMs (ms) {
   const second = 1000;
