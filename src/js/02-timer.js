@@ -23,7 +23,7 @@ const options = {
       Notiflix.Notify.failure(
         "Please choose a date in the future",
         {
-          timeout: 500,
+          timeout: 1000,
         },);
       addDisabled(button);
     } else {  
@@ -34,7 +34,7 @@ const options = {
           Notiflix.Notify.warning(
             "Таймер вже запущено! Схаменіться!",
             {
-              timeout: 500,
+              timeout: 1000,
             },);
           return;
         }
